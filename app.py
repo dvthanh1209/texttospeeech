@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify, render_template
 import requests
+import os
 
 app = Flask(__name__)
 
-# Khóa API
-api_key = "3hlR0ZtgRGnHh2lK2RBM582L4VYOOfiy"
+# Lấy API key từ biến môi trường
+api_key = os.environ.get('API_KEY')
 
 @app.route('/')
 def home():
@@ -16,6 +17,10 @@ def convert():
     voice = request.form.get('voice', 'banmai')
     speed = request.form.get('speed', 0)
 
+    # Kiểm tra nếu API key chưa được đặt
+    if not api_key:
+        return jsonify({"error": "API key chưa được cấu hình."}), 500
+
     url = "https://api.fpt.ai/hmi/tts/v5"
     headers = {
         "api_key": api_key,
@@ -24,7 +29,7 @@ def convert():
         "Content-Type": "application/json",
     }
     data = {
-        "text": text  # Gửi chỉ văn bản nhập vào
+        "text": text  # Gửi văn bản nhập vào
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -38,8 +43,10 @@ def convert():
     else:
         return jsonify({"error": "Lỗi khi gửi yêu cầu."}), response.status_code
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# Test route để kiểm tra ứng dụng Flask đang hoạt động
 @app.route('/test')
 def test():
     return "Hello, Flask is working!"
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
