@@ -100,7 +100,14 @@
             const resultDiv = document.getElementById('result');
             if (response.ok) {
                 const data = await response.json();
-                resultDiv.innerHTML = `<audio controls src="${data.audio_url}"></audio>`;
+                const audio = new Audio(data.audio_url);
+                
+                // Đảm bảo âm thanh phát ngay khi đã sẵn sàng
+                audio.addEventListener('canplaythrough', () => {
+                    audio.play(); // Phát âm thanh khi đã tải xong
+                }, { once: true });
+
+                resultDiv.innerHTML = '';  // Không hiển thị thanh phát âm thanh trên giao diện
             } else {
                 const error = await response.json();
                 resultDiv.innerHTML = `<p>Lỗi: ${error.error}</p>`;
