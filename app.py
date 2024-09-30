@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-
+# Lấy API key từ biến môi trường
 api_key = os.environ.get('API_KEY')
 
 @app.route('/')
@@ -13,13 +13,16 @@ def home():
 
 @app.route('/convert', methods=['POST'])
 def convert():
-    text = request.form.get('text')
-    voice = request.form.get('voice', 'banmai')
-    speed = request.form.get('speed', 0)
+    text = request.form.get('text')  # Lấy văn bản từ form
+    voice = request.form.get('voice', 'banmai')  # Lấy giọng từ form, mặc định là 'banmai'
+    speed = request.form.get('speed', 0)  # Lấy tốc độ từ form, mặc định là 0
 
-   
+    # Kiểm tra nếu API key chưa được cấu hình
     if not api_key:
         return jsonify({"error": "API key chưa được cấu hình."}), 500
+
+    # In ra văn bản được gửi đi để kiểm tra
+    print(f"Văn bản gửi đi: {text.strip()}")
 
     url = "https://api.fpt.ai/hmi/tts/v5"
     headers = {
@@ -29,11 +32,12 @@ def convert():
         "Content-Type": "application/json",
     }
     data = {
-        "text": text.strip()  # Đảm bảo văn bản gửi đi không chứa các ký tự thừa hoặc khoảng trắng
+        "text": text.strip()  # Đảm bảo chỉ gửi văn bản đã loại bỏ khoảng trắng thừa
     }
 
     response = requests.post(url, headers=headers, json=data)
 
+    # Kiểm tra trạng thái phản hồi từ API
     if response.status_code == 200:
         result = response.json()
         if result.get("async"):
@@ -43,7 +47,7 @@ def convert():
     else:
         return jsonify({"error": "Lỗi khi gửi yêu cầu."}), response.status_code
 
-
+# Route để kiểm tra Flask có hoạt động hay không
 @app.route('/test')
 def test():
     return "Hello, Flask is working!"
