@@ -7,35 +7,35 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('https://fptisp.net/wp-content/uploads/2022/08/e45c9780344191.5cde32f6b65ae.jpg'); /* Hình nền */
+            background-image: url('https://fptisp.net/wp-content/uploads/2022/08/e45c9780344191.5cde32f6b65ae.jpg');
             background-size: cover;
             background-position: center;
-            color: orange; /* Màu chữ */
-            text-align: center; 
+            color: orange;
+            text-align: center;
             padding: 20px;
-            position: relative; 
-            min-height: 100vh; /* Đảm bảo chiều cao tối thiểu */
+            position: relative;
+            min-height: 100vh;
         }
         .logo {
             position: absolute;
-            top: 20px; /* Khoảng cách từ trên */
-            width: 100px; /* Độ rộng logo */
+            top: 20px;
+            width: 100px;
         }
         .logo.left {
-            left: 20px; /* Khoảng cách từ bên trái */
+            left: 20px;
         }
         .logo.right {
-            right: 20px; /* Khoảng cách từ bên phải */
+            right: 20px;
         }
         h1 {
-            margin-top: 80px; /* Khoảng cách từ trên */
+            margin-top: 80px;
         }
         form {
             margin: 20px 0;
-            position: absolute; /* Để di chuyển form xuống dưới */
-            bottom: 20px; /* Khoảng cách từ đáy */
-            left: 50%; /* Canh giữa */
-            transform: translateX(-50%); /* Di chuyển về bên trái nửa chiều rộng */
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         input, select {
             padding: 10px;
@@ -47,12 +47,12 @@
             padding: 10px 15px;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF; /* Màu nền nút */
+            background-color: #007BFF;
             color: white;
             cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3; /* Màu nền nút khi hover */
+            background-color: #0056b3;
         }
         #result {
             margin-top: 20px;
@@ -60,12 +60,9 @@
     </style>
 </head>
 <body>
-    
-    <img src="https://rubicmarketing.com/wp-content/uploads/2022/07/y-nghia-logo-fpt-lan-3.jpg" alt="Logo phải" class="logo right"> <!-- Logo phải -->
-
+    <img src="https://rubicmarketing.com/wp-content/uploads/2022/07/y-nghia-logo-fpt-lan-3.jpg" alt="Logo phải" class="logo right">
     <h1>Chuyển Đổi Văn Bản Thành Âm Thanh</h1>
-    
-    <!-- Di chuyển form xuống dưới -->
+
     <form id="tts-form">
         <label for="text">Nhập văn bản:</label>
         <input type="text" id="text" name="text" required>
@@ -101,12 +98,10 @@
             if (response.ok) {
                 const data = await response.json();
                 const audio = new Audio(data.audio_url);
-                
-                // Đảm bảo âm thanh phát ngay khi đã sẵn sàng
-                audio.addEventListener('canplaythrough', () => {
-                    audio.play(); // Phát âm thanh khi đã tải xong
-                }, { once: true });
-
+                // Đảm bảo âm thanh phát ngay khi đã tải xong
+                audio.addEventListener('loadeddata', () => {
+                    audio.play(); // Phát âm thanh ngay khi đã tải xong
+                });
                 resultDiv.innerHTML = '';  // Không hiển thị thanh phát âm thanh trên giao diện
             } else {
                 const error = await response.json();
