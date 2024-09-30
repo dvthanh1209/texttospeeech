@@ -108,11 +108,11 @@
             if (response.ok) {
                 const data = await response.json();
                 const audio = new Audio(data.audio_url);
-                // Đảm bảo âm thanh phát ngay khi đã tải xong
+                
                 audio.addEventListener('loadeddata', () => {
-                    audio.play(); // Phát âm thanh ngay khi đã tải xong
+                    audio.play(); 
                 });
-                resultDiv.innerHTML = '';  // Không hiển thị thanh phát âm thanh trên giao diện
+                resultDiv.innerHTML = '';  
             } else {
                 const error = await response.json();
                 resultDiv.innerHTML = `<p>Lỗi: ${error.error}</p>`;
