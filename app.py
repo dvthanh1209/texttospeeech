@@ -34,6 +34,9 @@ def convert():
     data = {
         "text": text.strip()  # Đảm bảo chỉ gửi văn bản đã loại bỏ khoảng trắng thừa
     }
+    data = {
+        "text": "xin chào bạn, tên tôi là nguyên văn A"
+    }
 
     response = requests.post(url, headers=headers, json=data)
 
