@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# Lấy API key từ biến môi trường
+
 api_key = os.environ.get('API_KEY')
 
 @app.route('/')
@@ -29,7 +29,7 @@ def convert():
         "Content-Type": "application/json",
     }
     data = {
-        "text": text  # Gửi văn bản nhập vào
+        "text": text  
     }
 
     response = requests.post(url, headers=headers, json=data)
@@ -43,7 +43,7 @@ def convert():
     else:
         return jsonify({"error": "Lỗi khi gửi yêu cầu."}), response.status_code
 
-# Test route để kiểm tra ứng dụng Flask đang hoạt động
+
 @app.route('/test')
 def test():
     return "Hello, Flask is working!"
