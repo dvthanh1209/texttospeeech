@@ -40,3 +40,6 @@ def convert():
 
 if __name__ == "__main__":
     app.run(debug=True)
+@app.route('/test')
+def test():
+    return "Hello, Flask is working!"
