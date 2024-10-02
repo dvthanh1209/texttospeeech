@@ -5,20 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convert text to speech</title>
     <style>
-        /* CSS code ở đây */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://fptisp.net/wp-content/uploads/2022/08/e45c9780344191.5cde32f6b65ae.jpg');
+            background-size: cover;
+            background-position: center;
+            color: orange;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            width: 100px;
+        }
+        .logo.left {
+            left: 20px;
+        }
+        .logo.right {
+            right: 20px;
+        }
+        h1 {
+            margin-top: 80px;
+        }
+        form {
+            margin: 20px 0;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        input, select {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        #note {
+            position: absolute;
+            bottom: 80px;
+            left: 10px;
+            color: white;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
+    <img src="https://rubicmarketing.com/wp-content/uploads/2022/07/y-nghia-logo-fpt-lan-3.jpg" alt="Logo phải" class="logo right">
     <h1>Convert text to speech</h1>
 
-    <form id="tts-form" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+    <form id="tts-form">
         <label for="text">Nhập văn bản:</label>
         <input type="text" id="text" name="text" required>
         <br>
         <label for="voice">Chọn giọng:</label>
         <select id="voice" name="voice">
             <option value="banmai">Ban Mai (nữ miền Bắc)</option>
-            <!-- Các tuỳ chọn khác -->
+            <option value="lannhi">Lan Nhi (nữ miền Nam)</option>
+            <option value="leminh">Lê Minh (nam miền Bắc)</option>
+            <option value="myan">Mỹ An (nữ miền Trung)</option>
+            <option value="thuminh">Thu Minh (nữ miền Bắc)</option>
+            <option value="giahuy">Gia Huy (nam miền Trung)</option>
+            <option value="linhsan">Linh San (nữ miền Nam)</option>
         </select>
         <br>
         <label for="speed">Tốc độ:</label>
@@ -28,6 +92,8 @@
     </form>
 
     <div id="result"></div>
+
+    <div id="note">Lưu ý: nếu không có âm thanh vui lòng nhấn lần 2</div>
 
     <script>
         document.getElementById('tts-form').addEventListener('submit', async function(event) {
@@ -41,6 +107,7 @@
             if (response.ok) {
                 const data = await response.json();
                 const audio = new Audio(data.audio_url);
+                
                 audio.addEventListener('loadeddata', () => {
                     audio.play(); 
                 });
