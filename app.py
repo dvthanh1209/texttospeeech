@@ -13,7 +13,7 @@ def home():
 
 @app.route('/convert', methods=['POST'])
 def convert():
-    # Lấy văn bản từ form và đảm bảo mã hóa UTF-8
+    # Lấy văn bản từ form
     text = request.form.get('text')
     voice = request.form.get('voice', 'banmai')  # Giọng mặc định là 'banmai'
     speed = request.form.get('speed', 0)  # Tốc độ mặc định là 0
@@ -21,11 +21,20 @@ def convert():
     if not api_key:
         return jsonify({"error": "API key chưa được cấu hình."}), 500
 
-    # Mã hóa văn bản bằng UTF-8 để đảm bảo xử lý đúng ký tự tiếng Việt
+    # In văn bản để kiểm tra dữ liệu đầu vào
+    print(f"Văn bản gốc: {text}")
+
+    # Đảm bảo văn bản đã được mã hóa bằng UTF-8 trước khi gửi
     if text:
-        text = text.strip()
-        print(f"Văn bản gốc: {text}")  # In ra văn bản gốc để kiểm tra
-        print(f"Văn bản sau khi mã hóa UTF-8: {text.encode('utf-8')}")  # Kiểm tra mã hóa
+        text = text.strip()  # Loại bỏ khoảng trắng thừa
+        try:
+            # Mã hóa văn bản thành UTF-8 để tránh lỗi
+            text = text.encode('utf-8').decode('utf-8')
+        except UnicodeEncodeError as e:
+            print(f"Lỗi mã hóa UTF-8: {e}")
+            return jsonify({"error": "Lỗi mã hóa UTF-8."}), 400
+
+        print(f"Văn bản sau khi mã hóa UTF-8: {text}")  # In kiểm tra mã hóa UTF-8
 
     url = "https://api.fpt.ai/hmi/tts/v5"
     headers = {
@@ -35,14 +44,16 @@ def convert():
         "Content-Type": "application/json; charset=utf-8"
     }
     data = {
-        "text": text  # Đảm bảo văn bản đã loại bỏ khoảng trắng và mã hóa UTF-8
+        "text": text  # Văn bản đã mã hóa
     }
 
     # Gửi yêu cầu tới API
     response = requests.post(url, headers=headers, json=data)
 
+    # Kiểm tra phản hồi từ API
     if response.status_code == 200:
         result = response.json()
+        print(f"Phản hồi từ API: {result}")  # In ra phản hồi để kiểm tra
         if result.get("async"):
             return jsonify({"audio_url": result["async"]})
         else:
