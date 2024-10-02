@@ -65,7 +65,5 @@ def test():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-    # In ra văn bản trước và sau mã hóa để kiểm tra
-print(f"Văn bản gốc: {text}")
-print(f"Văn bản sau khi mã hóa UTF-8: {text.encode('utf-8')}")
+    
 
