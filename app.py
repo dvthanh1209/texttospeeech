@@ -45,8 +45,8 @@ def convert():
         "text": text  # Đảm bảo văn bản đã loại bỏ khoảng trắng thừa
     }
 
-    # In ra dữ liệu trước khi gửi đến API
-    print(f"Dữ liệu gửi đến API: {data}")
+    # In ra dữ liệu trước khi gửi đến API để kiểm tra
+    print(f"Dữ liệu gửi đến API (text): {data}")
 
     # Gửi yêu cầu tới API
     response = requests.post(url, headers=headers, json=data)
@@ -63,8 +63,8 @@ def convert():
         else:
             return jsonify({"error": "Không có liên kết âm thanh trả về."}), 400
     else:
-        print(f"Lỗi khi gửi yêu cầu: {response.status_code}")
-        return jsonify({"error": "Lỗi khi gửi yêu cầu."}), response.status_code
+        print(f"Lỗi khi gửi yêu cầu: {response.status_code}, {response.text}")
+        return jsonify({"error": f"Lỗi khi gửi yêu cầu. {response.text}"}), response.status_code
 
 # Route để kiểm tra Flask có hoạt động hay không
 @app.route('/test')
