@@ -22,7 +22,7 @@ def convert():
         return jsonify({"error": "API key chưa được cấu hình."}), 500
 
     # Kiểm tra và in văn bản trước khi xử lý
-    print(f"Văn bản gốc: {text}")
+    print(f"Văn bản gốc từ form: {text}")
 
     # Đảm bảo văn bản được mã hóa bằng UTF-8
     if text:
@@ -44,6 +44,9 @@ def convert():
         "text": text  # Đảm bảo văn bản đã loại bỏ khoảng trắng thừa
     }
 
+    # In ra dữ liệu trước khi gửi đến API
+    print(f"Dữ liệu gửi đến API: {data}")
+
     # Gửi yêu cầu tới API
     response = requests.post(url, headers=headers, json=data)
 
@@ -51,11 +54,15 @@ def convert():
     if response.status_code == 200:
         result = response.json()
         print(f"Phản hồi từ API: {result}")
+
+        # In ra phần URL của âm thanh nếu có
         if result.get("async"):
+            print(f"URL âm thanh: {result['async']}")
             return jsonify({"audio_url": result["async"]})
         else:
             return jsonify({"error": "Không có liên kết âm thanh trả về."}), 400
     else:
+        print(f"Lỗi khi gửi yêu cầu: {response.status_code}")
         return jsonify({"error": "Lỗi khi gửi yêu cầu."}), response.status_code
 
 # Route để kiểm tra Flask có hoạt động hay không
@@ -65,5 +72,3 @@ def test():
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-    
-
