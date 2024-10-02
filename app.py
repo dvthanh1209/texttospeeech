@@ -27,6 +27,7 @@ def convert():
     # Đảm bảo văn bản được mã hóa bằng UTF-8
     if text:
         try:
+            # Mã hóa lại bằng UTF-8 để tránh lỗi
             text = text.strip().encode('utf-8').decode('utf-8')
             print(f"Văn bản sau khi mã hóa UTF-8: {text}")
         except UnicodeEncodeError as e:
@@ -55,7 +56,7 @@ def convert():
         result = response.json()
         print(f"Phản hồi từ API: {result}")
 
-        # In ra phần URL của âm thanh nếu có
+        # In ra URL của âm thanh nếu có
         if result.get("async"):
             print(f"URL âm thanh: {result['async']}")
             return jsonify({"audio_url": result["async"]})
