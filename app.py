@@ -23,7 +23,9 @@ def convert():
 
     # Mã hóa văn bản bằng UTF-8 để đảm bảo xử lý đúng ký tự tiếng Việt
     if text:
-        text = text.strip().encode('utf-8').decode('utf-8')
+        text = text.strip()
+        print(f"Văn bản gốc: {text}")  # In ra văn bản gốc để kiểm tra
+        print(f"Văn bản sau khi mã hóa UTF-8: {text.encode('utf-8')}")  # Kiểm tra mã hóa
 
     url = "https://api.fpt.ai/hmi/tts/v5"
     headers = {
@@ -47,3 +49,11 @@ def convert():
             return jsonify({"error": "Không có liên kết âm thanh trả về."}), 400
     else:
         return jsonify({"error": "Lỗi khi gửi yêu cầu."}), response.status_code
+
+# Route để kiểm tra Flask có hoạt động hay không
+@app.route('/test')
+def test():
+    return "Hello, Flask is working!"
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
